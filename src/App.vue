@@ -14,9 +14,9 @@
       @swipe="handleSwipe"
       @lazyLoaded="handleLazyLoaded"
       @lazyLoadError="handleLazeLoadError">
-      <div class="card-wrapper" v-for="card in 3">
-        <div class="card-animation">
-          <animation></animation>
+      <div class="card-wrapper" :key="card.id" v-for="card in cards">
+        <div  class="card-animation">
+          <animation :ani-conf="card.conf"></animation>
         </div>
         <div class="card-content">
           <h5>你曾經為了拿LINE免費貼圖，分享活動訊息給親朋好友嗎？</h5>
@@ -79,14 +79,11 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
 import Animation from './components/animation.vue'
 import Slick from 'vue-slick';
 import axios from 'axios'
 import bodymovin from 'lottie-web';
-// import animationData1 from '../public/data1.json'
-// import animationData2 from '../public/data2.json'
-// import animationData3 from '../public/data3.json'
+
 
 export default {
   name: 'app',
@@ -94,9 +91,6 @@ export default {
     return {
       cover: '',
       steps: 0,
-      animation1: null,
-      animation2: null,
-      animation3: null,
       publicPath: process.env.BASE_URL,
       picked: true,
       isFold: false,
@@ -108,6 +102,10 @@ export default {
       cards: [
         {
           id: 'card1',
+          conf: {
+            name: 'robot',
+            data: require('../public/data1.json')
+          },
           name: 'card1',
           element: 'robot1',
           question: '你曾經為了拿LINE免費貼圖，分享活動訊息給親朋好友嗎？',
@@ -117,6 +115,10 @@ export default {
         },
         {
           id: 'card2',
+          conf: {
+            name: 'robot2',
+            data: require('../public/data2.json')
+          },
           name: 'card2',
           element: 'robot2',
           question: '你曾經為了拿LINE免費貼圖，分享活動訊息給親朋好友嗎？',
@@ -126,6 +128,10 @@ export default {
         },
         {
           id: 'card3',
+          conf: {
+            name: 'robot3',
+            data: require('../public/data3.json')
+          },
           name: 'card3',
           element: 'robot3',
           question: '你曾經為了拿LINE免費貼圖，分享活動訊息給親朋好友嗎？',
@@ -167,39 +173,39 @@ export default {
   mounted(){
 
       let vm  = this
-      let element1 = this.$refs['robot1']
-      let element2 = this.$refs['robot2']
-      let element3 = this.$refs['robot3']
+      // let element1 = this.$refs['robot1']
+      // let element2 = this.$refs['robot2']
+      // let element3 = this.$refs['robot3']
       
-      this.animation1 = bodymovin.loadAnimation({
-            container: element1, // Required
-            animationData: animationData1, // Required
-            renderer: 'svg', // Required
-            loop: true, // Optional
-            autoplay: true, // Optional
-            name: "Hello World", // Name for future reference. Optional.
-          })
+      // this.animation1 = bodymovin.loadAnimation({
+      //       container: element1, // Required
+      //       animationData: animationData1, // Required
+      //       renderer: 'svg', // Required
+      //       loop: true, // Optional
+      //       autoplay: true, // Optional
+      //       name: "Hello World", // Name for future reference. Optional.
+      //     })
 
-      this.animation2 = bodymovin.loadAnimation({
-            container: element2, // Required
-            animationData: animationData2, // Required
-            renderer: 'svg', // Required
-            loop: true, // Optional
-            autoplay: true, // Optional
-            name: "Hello World", // Name for future reference. Optional.
-          })
+      // this.animation2 = bodymovin.loadAnimation({
+      //       container: element2, // Required
+      //       animationData: animationData2, // Required
+      //       renderer: 'svg', // Required
+      //       loop: true, // Optional
+      //       autoplay: true, // Optional
+      //       name: "Hello World", // Name for future reference. Optional.
+      //     })
 
-      this.animation3 = bodymovin.loadAnimation({
-            container: element3, // Required
-            animationData: animationData3, // Required
-            renderer: 'svg', // Required
-            loop: true, // Optional
-            autoplay: true, // Optional
-            name: "Hello World", // Name for future reference. Optional.
-          })
-      this.animation1.stop()
-      this.animation2.stop()
-      this.animation3.stop()
+      // this.animation3 = bodymovin.loadAnimation({
+      //       container: element3, // Required
+      //       animationData: animationData3, // Required
+      //       renderer: 'svg', // Required
+      //       loop: true, // Optional
+      //       autoplay: true, // Optional
+      //       name: "Hello World", // Name for future reference. Optional.
+      //     })
+      // this.animation1.stop()
+      // this.animation2.stop()
+      // this.animation3.stop()
     },
   watch: {
     cards: {
