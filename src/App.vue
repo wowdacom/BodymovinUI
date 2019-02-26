@@ -72,7 +72,7 @@ export default {
       picked: '',
       robot1: 'robot1',
       ansmers: [
-
+        
       ],
       cards: [
         {
