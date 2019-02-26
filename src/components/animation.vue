@@ -8,7 +8,7 @@
 import bodymovin from 'lottie-web';
 
 export default {
-  name: 'App',
+  name: 'animation',
   data () {
     return {
       animation: null
@@ -21,7 +21,7 @@ export default {
         default: function () {
             return {
                 name: 'robot',
-                data: require('../../public/data1.json')
+                data: require('../../public/json/data1.json')
             }
         }
     }
@@ -37,8 +37,8 @@ export default {
             container: element, // Required
             animationData: data, // Required
             renderer: 'svg', // Required
-            loop: false, // Optional
-            autoplay: false // Optional
+            loop: true, // Optional
+            autoplay: true // Optional
           })
   }
 }

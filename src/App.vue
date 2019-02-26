@@ -1,85 +1,60 @@
 <template>
   <div id="app">
-    <slick
-      ref="slick"
-      :options="slickOptions"
-      @afterChange="handleAfterChange"
-      @beforeChange="handleBeforeChange"
-      @breakpoint="handleBreakpoint"
-      @destroy="handleDestroy"
-      @edge="handleEdge"
-      @init="handleInit"
-      @reInit="handleReInit"
-      @setPosition="handleSetPosition"
-      @swipe="handleSwipe"
-      @lazyLoaded="handleLazyLoaded"
-      @lazyLoadError="handleLazeLoadError">
-      <div class="card-wrapper" :key="card.id" v-for="card in cards">
-        <div  class="card-animation">
-          <animation :ani-conf="card.conf"></animation>
-        </div>
-        <div class="card-content">
-          <h5>你曾經為了拿LINE免費貼圖，分享活動訊息給親朋好友嗎？</h5>
-          <input type="radio" id="one" value="first" v-model="picked">
-          <label for="one">Yes</label>
-          <input type="radio" id="two" value="seconed" v-model="picked">
-          <label for="two">No</label>
+
+    <div class="game-box">
+      <div class="animation-wrapper">
+        <div class="animation-control" v-show="step === index" :key="index" v-for="(item, index) in animations">
+          <animation :ani-conf="item"></animation>
         </div>
       </div>
-      <!-- <div class="card-wrapper" :key="card.id" v-for="card in cards">
-        <div class="card-animation">
-          <div class="animation" :ref="card.element"></div>
-        </div>
-        <div class="card-content">
-          <h5>{{ card.question }}</h5>
-          <input type="radio" id="one" :value="card.value1" v-model="card.picked">
-          <label for="one">Yes</label>
-          <input type="radio" id="two" :value="card.value2" v-model="card.picked">
-          <label for="two">No</label>
-        </div>
-      </div> -->
-      <!-- <div class="card-wrapper">
-        <div class="card-animation">
-          <div class="animation" :ref="robot1"></div>
-        </div>
-        <div class="card-content">
-          <h5>你曾經為了拿LINE免費貼圖，分享活動訊息給親朋好友嗎？</h5>
-          <input type="radio" id="one" value="first" v-model="picked">
-          <label for="one">Yes</label>
-          <input type="radio" id="two" value="seconed" v-model="picked">
-          <label for="two">No</label>
-        </div>
+      <div class="slick-wrapper">
+        <slick
+          ref="slick"
+          :options="slickOptions"
+          @afterChange="handleAfterChange"
+          @beforeChange="handleBeforeChange"
+          @breakpoint="handleBreakpoint"
+          @destroy="handleDestroy"
+          @edge="handleEdge"
+          @init="handleInit"
+          @reInit="handleReInit"
+          @setPosition="handleSetPosition"
+          @swipe="handleSwipe"
+          @lazyLoaded="handleLazyLoaded"
+          @lazyLoadError="handleLazeLoadError">
+          <div class="card-wrapper" :key="card.id" v-for="card in cards">
+            <div class="card-content">
+              <h5 class="card-title">你曾經為了拿LINE免費貼圖，分享活動訊息給親朋好友嗎？</h5>
+              <input type="radio" id="one" value="first" v-model="picked">
+              <label for="one">Yes</label>
+              <input type="radio" id="two" value="seconed" v-model="picked">
+              <label for="two">No</label>
+              <div class="extend-wrapper">
+                <button class="next">
+                  下一題
+                </button>
+                <div class="give-up">放棄遊戲看結果</div>
+                <h5 class="card-subtitle">別人怎麼選?</h5>
+                <p>到目前為止，63%的使用者跟你的答案相同。</p>
+                <div class="card-chart">
+                  <single-chart :option-type="card.chart.type" :option-title="card.chart.option1" :option-number="card.chart.number1"></single-chart>
+                  <single-chart :option-type="card.chart.type" :option-title="card.chart.option2" :option-number="card.chart.number2"></single-chart>
+                </div>
+                <h5 class="card-subtitle">專家怎麼說?</h5>
+                <h5 class="card-subtitle">延伸閱讀</h5>
+              </div>
+            </div>
+          </div>
+        </slick>
       </div>
-      <div class="card-wrapper">
-        <div class="card-animation">
-          <div class="animation" ref="robot2"></div>
-        </div>
-        <div class="card-content">
-          <h5>你曾經為了拿LINE免費貼圖，分享活動訊息給親朋好友嗎？</h5>
-          <input type="radio" id="one" value="third" v-model="picked">
-          <label for="one">Yes</label>
-          <input type="radio" id="two" value="forth" v-model="picked">
-          <label for="two">No</label>
-        </div>
-      </div>
-      <div class="card-wrapper">
-        <div class="card-animation">
-          <div class="animation" ref="robot3"></div>
-        </div>
-        <div class="card-content">
-          <h5>你曾經為了拿LINE免費貼圖，分享活動訊息給親朋好友嗎？</h5>
-          <input type="radio" id="one" value="fifth" v-model="picked">
-          <label for="one">Yes</label>
-          <input type="radio" id="two" value="sixth" v-model="picked">
-          <label for="two">No</label>
-        </div>
-      </div> -->
-    </slick>
+    </div>
+    
   </div>
 </template>
 
 <script>
 import Animation from './components/animation.vue'
+import SingleChart from './components/singleChart.vue'
 import Slick from 'vue-slick';
 import axios from 'axios'
 import bodymovin from 'lottie-web';
@@ -90,7 +65,7 @@ export default {
   data () {
     return {
       cover: '',
-      steps: 0,
+      step: 0,
       publicPath: process.env.BASE_URL,
       picked: true,
       isFold: false,
@@ -104,7 +79,14 @@ export default {
           id: 'card1',
           conf: {
             name: 'robot',
-            data: require('../public/data1.json')
+            data: require('../public/json/data1.json')
+          },
+          chart: {
+            type: 'text',
+            option1: '是',
+            number1: 10,
+            option2: '否',
+            number2: 90
           },
           name: 'card1',
           element: 'robot1',
@@ -117,7 +99,12 @@ export default {
           id: 'card2',
           conf: {
             name: 'robot2',
-            data: require('../public/data2.json')
+            data: require('../public/json/data2.json')
+          },
+          chart: {
+            type: 'star',
+            number1: 1,
+            number2: 5
           },
           name: 'card2',
           element: 'robot2',
@@ -130,7 +117,14 @@ export default {
           id: 'card3',
           conf: {
             name: 'robot3',
-            data: require('../public/data3.json')
+            data: require('../public/json/data3.json')
+          },
+          chart: {
+            type: 'text',
+            option1: '是',
+            number1: 40,
+            option2: '否',
+            number2: 60
           },
           name: 'card3',
           element: 'robot3',
@@ -139,6 +133,20 @@ export default {
           value2: 1,
           picked: ''
         },
+      ],
+      animations : [
+        {
+          name: 'robot',
+          data: require('../public/json/data1.json')
+        },
+        {
+          name: 'robot2',
+          data: require('../public/json/data2.json')
+        },
+        {
+          name: 'robot3',
+          data: require('../public/json/data3.json')
+        }
       ],
       slickOptions: {
           slidesToShow: 1,
@@ -173,39 +181,7 @@ export default {
   mounted(){
 
       let vm  = this
-      // let element1 = this.$refs['robot1']
-      // let element2 = this.$refs['robot2']
-      // let element3 = this.$refs['robot3']
-      
-      // this.animation1 = bodymovin.loadAnimation({
-      //       container: element1, // Required
-      //       animationData: animationData1, // Required
-      //       renderer: 'svg', // Required
-      //       loop: true, // Optional
-      //       autoplay: true, // Optional
-      //       name: "Hello World", // Name for future reference. Optional.
-      //     })
 
-      // this.animation2 = bodymovin.loadAnimation({
-      //       container: element2, // Required
-      //       animationData: animationData2, // Required
-      //       renderer: 'svg', // Required
-      //       loop: true, // Optional
-      //       autoplay: true, // Optional
-      //       name: "Hello World", // Name for future reference. Optional.
-      //     })
-
-      // this.animation3 = bodymovin.loadAnimation({
-      //       container: element3, // Required
-      //       animationData: animationData3, // Required
-      //       renderer: 'svg', // Required
-      //       loop: true, // Optional
-      //       autoplay: true, // Optional
-      //       name: "Hello World", // Name for future reference. Optional.
-      //     })
-      // this.animation1.stop()
-      // this.animation2.stop()
-      // this.animation3.stop()
     },
   watch: {
     cards: {
@@ -216,9 +192,9 @@ export default {
     }
   },
   components: {
-    HelloWorld,
     Slick,
-    Animation
+    Animation,
+    SingleChart
   },
   methods: {
         controlAni () {
@@ -246,7 +222,14 @@ export default {
             console.log('handleAfterChange', event, slick, currentSlide);
         },
         handleBeforeChange(event, slick, currentSlide, nextSlide) {
-          this.isFold = false
+          this.step = nextSlide
+
+          // this.isFold = false
+          // let newAnimation = {}
+          // newAnimation = { ...this.cards[nextSlide].conf }
+          // this.currentAnimations = { ...newAnimation }
+          
+        console.log("currentSlider:" + currentSlide)
             console.log('handleBeforeChange', event, slick, currentSlide, nextSlide);
         },
         handleBreakpoint(event, slick, breakpoint) {
@@ -279,7 +262,7 @@ export default {
         expand() {
           this.isFold = !this.isFold
         }
-    }
+    },
 }
 </script>
 
@@ -291,32 +274,60 @@ html, body {
   padding: 0;
 }
 #app {
-  .slick-slide {
-    width: 80vw;
-  }
-  .card-wrapper {
-    min-height: 100vh;
-    position: relative;
-    .card-animation {
-      width: 95%;
-      height: 40vh;
+
+  .game-box {
+    .animation-wrapper {
+      @media (min-width: 768px) and (max-width: 1024px){
+
+      }
+      @media screen and (min-width: 1025px){
+        width: 50%;
+        float: left;
+      }
+        .slick-slide {
+          width: 100%;
+        }
     }
-    .card-content {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      margin: 0;
-      box-sizing: border-box;
-      padding: 10px;
-      width: 95%;
-      min-height: 40vh;
-      border: solid 1px black;
-      border-radius: 5px;
-      margin: 0;
-      h5 {
-        margin: 0;
+    .slick-wrapper {
+      @media (min-width: 768px) and (max-width: 1024px){
+
+      }
+      @media screen and (min-width: 1025px){
+        width: 50%;
+        float: right;
+      }
+      .card-wrapper {
+        min-height: 100vh;
+        position: relative;
+        .card-animation {
+          width: 95%;
+          height: 40vh;
+        }
+        .card-content {
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          margin: 0;
+          box-sizing: border-box;
+          padding: 10px;
+          width: 95%;
+          min-height: 40vh;
+          border: solid 1px black;
+          border-radius: 5px;
+          margin: 0;
+          h5 {
+            margin: 0;
+          }
+          .extend-wrapper {
+            .next {
+              width: 100%;
+            }
+          }       
+        }
       }
     }
   }
+  
+  
 }
 </style>
