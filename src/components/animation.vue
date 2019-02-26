@@ -1,6 +1,6 @@
 <template>
   <div class="animation">
-    <div :ref="conf.name"></div>
+    <div :ref="aniConf.name"></div>
   </div>
 </template>
 
