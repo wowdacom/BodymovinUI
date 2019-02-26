@@ -16,7 +16,10 @@
       @lazyLoadError="handleLazeLoadError">
       <div class="card-wrapper" :key="card.id" v-for="card in cards">
         <div  class="card-animation">
-          <animation :ani-conf="card.conf"></animation>
+          <div class="animation-wrapper">
+            <animation :ani-conf="card.init"></animation>
+          </div>
+          
         </div>
         <div class="card-content">
           <h5>你曾經為了拿LINE免費貼圖，分享活動訊息給親朋好友嗎？</h5>
@@ -102,7 +105,7 @@ export default {
       cards: [
         {
           id: 'card1',
-          conf: {
+          init: {
             name: 'robot',
             data: require('../public/data1.json')
           },
@@ -115,7 +118,7 @@ export default {
         },
         {
           id: 'card2',
-          conf: {
+          init: {
             name: 'robot2',
             data: require('../public/data2.json')
           },
@@ -128,7 +131,7 @@ export default {
         },
         {
           id: 'card3',
-          conf: {
+          init: {
             name: 'robot3',
             data: require('../public/data3.json')
           },
@@ -216,7 +219,6 @@ export default {
     }
   },
   components: {
-    HelloWorld,
     Slick,
     Animation
   },
@@ -296,10 +298,37 @@ html, body {
   }
   .card-wrapper {
     min-height: 100vh;
+    width: 100vw;
     position: relative;
+    @media (min-width: 768px) and (max-width: 1024px){
+
+    }
+    @media screen and (min-width: 1025px){
+      clear: both;
+    }
     .card-animation {
       width: 95%;
       height: 40vh;
+      box-sizing: border-box;
+      @media (min-width: 768px) and (max-width: 1024px){
+
+      }
+      @media screen and (min-width: 1025px){
+        display: inline-block;
+        width: 50%;
+        float: left;
+        height: auto;
+      }
+      .animation-wrapper {
+        
+        @media (min-width: 768px) and (max-width: 1024px){
+
+        }
+        @media screen and (min-width: 1025px){
+          width: 90%;
+        }
+      }
+      
     }
     .card-content {
       position: absolute;
@@ -313,6 +342,18 @@ html, body {
       border: solid 1px black;
       border-radius: 5px;
       margin: 0;
+      @media (min-width: 768px) and (max-width: 1024px){
+
+      }
+      @media screen and (min-width: 1025px){
+        position: relative;
+        left: 0;
+        top: 0;
+        transform: translateX(0%);
+        display: inline-block;
+        width: 50%;
+        float: right;
+      }
       h5 {
         margin: 0;
       }
